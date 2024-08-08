@@ -16,12 +16,7 @@ Plug 'briones-gabriel/darcula-solid.nvim'
 Plug 'rktjmp/lush.nvim'
 Plug 'ellisonleao/gruvbox.nvim'
 
-" LSP va avtomatik to'ldirish uchun plaginlar
-Plug 'neovim/nvim-lspconfig'
-Plug 'hrsh7th/nvim-cmp'
-Plug 'hrsh7th/cmp-nvim-lsp'
-Plug 'L3MON4D3/LuaSnip'
-Plug 'saadparwaiz1/cmp_luasnip'
+
 
 " coc.nvim o'rnatish
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -46,51 +41,19 @@ call plug#end()
 set background=dark " or light if you want light mode
 colorscheme gruvbox
 
+
 "colorscheme darcula-solid
 
 
-lua << EOF
-require('lspconfig').pyright.setup{}
-EOF
-
-
-lua << EOF
-local cmp = require'cmp'
-local luasnip = require'luasnip'
-
-cmp.setup({
-  snippet = {
-    expand = function(args)
-      luasnip.lsp_expand(args.body)
-    end,
-  },
-  mapping = cmp.mapping.preset.insert({
-    ['<C-s-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.abort(),
-    ['<CR>'] = cmp.mapping.confirm({ select = true }),
-  }),
-  sources = cmp.config.sources({
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
-  }, {
-    { name = 'buffer' },
-  })
-})
-
-local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
-require'lspconfig'.pyright.setup{}
-EOF
 
 
 autocmd BufWritePre * silent! call CocAction('runCommand', 'editor.action.organizeImport')
 
-if filereadable(expand("~/.config/nvim/coc-settings.json"))
-  let g:coc_user_config_file = expand("~/.config/nvim/coc-settings.json")
+if filereadable(expand("$LOCALAPPDATA/nvim/coc-settings.json"))
+  let g:coc_user_config_file = expand("$LOCALAPPDATA/nvim/coc-settings.json")
 endif
 
-let g:coc_snippet_next = '<CR>'
+let g:coc_snippet_next = '<tab>'
 let g:coc_snippet_prev = '<s-tab>'
 
 inoremap <silent><expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
@@ -109,9 +72,6 @@ command! -nargs=0 Format :call CocAction('format')
 command! -nargs=? Fold :call CocAction('fold', <f-args>)
 command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
 
-if filereadable(expand("~/.config/nvim/coc-settings.json"))
-  let g:coc_user_config_file = expand("~/.config/nvim/coc-settings.json")
-endif
 
 lua << EOF
 require("autoclose").setup()
@@ -216,3 +176,12 @@ nnoremap <C-f> :Neotree focus<CR>
 nnoremap <S-%> :lua require("neo-tree").commands.create_file(require("neo-tree").get_state())<CR>
 
 nnoremap <S-d> :lua require("neo-tree").commands.create_directory(require("neo-tree").get_state())<CR>
+
+
+nnoremap <S-n> :BufferLineCycleNext<CR>
+nnoremap <S-p> :BufferLineCyclePrev<CR>
+
+
+
+
+
